@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Space...
+ * @author Mustafa Masri
  * @since March 26, 2025
  * <p>
  * This class handles file reading operations for the space travel simulation.
  * It reads and parses data from input files for planets, spaceships, and people.
+ * HOWEVER, the file .txt file names will remain in turkish.
+ * Araclar.txt, Kisiler.txt, Gezegenler.txt
  * </p>
  */
 public class FileReader {

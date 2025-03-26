@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        // File paths for input data
+        // File paths for input data - keep the original file names
         String planetsFile = "Gezegenler.txt";
         String shipsFile = "Araclar.txt";
         String peopleFile = "Kisiler.txt";

@@ -203,25 +203,26 @@ public class Simulation {
     private void displayState() {
         clearScreen();
 
-        System.out.println("Gezegenler:");
+        System.out.println("Planets:");
         for (Planet planet : planets) {
             System.out.printf("--- %s ---%n", planet.getName());
-            System.out.printf("Tarih: %s%n", planet.getTime().getDate());
-            System.out.printf("Nüfus: %d%n%n", planet.getPopulation().size());
+            System.out.printf("Date: %s%n", planet.getTime().getDate());
+            System.out.printf("Population: %d%n%n", planet.getPopulation().size());
         }
 
-        System.out.println("Uzay Araçları:");
-        System.out.printf("%-10s %-10s %-10s %-10s %-20s %-20s%n", "Araç Adı", "Durum", "Çıkış", "Varış", "Hedefe Kalan Saat", "Hedefe Varacağı Tarih");
+        System.out.println("Spaceships:");
+        System.out.printf("%-10s %-10s %-10s %-10s %-20s %-20s%n", 
+                "Ship Name", "Status", "Departure", "Destination", "Hours Remaining", "Arrival Date");
         for (Spaceship ship : ships) {
             String status;
             if (ship.isDestroyed()) {
-                status = "İMHA";
+                status = "DESTROYED";
             } else if (ship.isInTransit()) {
-                status = "Yolda";
+                status = "In Transit";
             } else if (ship.isTravelComplete()) {
-                status = "Vardı";
+                status = "Arrived";
             } else {
-                status = "Bekliyor";
+                status = "Waiting";
             }
 
             String arrivalDate = ship.isInTransit() ? ship.getDestinationPlanet() : "--";
