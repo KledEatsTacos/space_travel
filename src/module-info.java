@@ -1,0 +1,2 @@
+module space_travel {
+}

@@ -1,0 +1,10 @@
+Alex#25#500#Earth
+Amy#30#400#Earth
+Michael#40#600#Apollo
+Zoe#35#480#Apollo
+Charles#45#350#Mars
+Diana#28#420#StarTrek
+Emily#33#550#Jupiter
+Edward#38#380#Jupiter
+Grace#42#490#Venus
+Harry#50#520#SpaceX

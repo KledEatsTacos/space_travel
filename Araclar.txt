@@ -1,0 +1,4 @@
+Apollo#Earth#Mars#2.1.2023#48
+StarTrek#Mars#Jupiter#3.1.2023#72
+SpaceX#Earth#Venus#5.1.2023#36
+Voyager#Jupiter#Earth#4.1.2023#60
