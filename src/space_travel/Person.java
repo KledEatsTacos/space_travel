@@ -14,14 +14,6 @@ public class Person {
     private int lifeRemaining;
     private String currentVehicle;
     
-    /**
-     * Creates a new person with the specified attributes
-     * 
-     * @param name The person's name
-     * @param age The person's age in years
-     * @param lifeRemaining The person's remaining life in hours
-     * @param currentVehicle The name of the vehicle or planet where the person is located
-     */
     public Person(String name, int age, int lifeRemaining, String currentVehicle) {
         this.name = name;
         this.age = age;
@@ -29,63 +21,30 @@ public class Person {
         this.currentVehicle = currentVehicle;
     }
     
-    /**
-     * Decreases the person's remaining life by one hour
-     */
     public void passHour() {
         lifeRemaining--;
     }
     
-    /**
-     * Checks if the person is still alive
-     * 
-     * @return true if the person is alive, false if they have died
-     */
     public boolean isAlive() {
         return lifeRemaining > 0;
     }
     
-    /**
-     * Gets the person's name
-     * 
-     * @return The person's name
-     */
     public String getName() {
         return name;
     }
     
-    /**
-     * Gets the person's age in years
-     * 
-     * @return The person's age
-     */
     public int getAge() {
         return age;
     }
     
-    /**
-     * Gets the person's remaining life in hours
-     * 
-     * @return The remaining life hours
-     */
     public int getLifeRemaining() {
         return lifeRemaining;
     }
     
-    /**
-     * Gets the name of the vehicle or planet where the person is currently located
-     * 
-     * @return The current location name
-     */
     public String getCurrentVehicle() {
         return currentVehicle;
     }
     
-    /**
-     * Sets the name of the vehicle or planet where the person is located
-     * 
-     * @param currentVehicle The new location name
-     */
     public void setCurrentVehicle(String currentVehicle) {
         this.currentVehicle = currentVehicle;
     }

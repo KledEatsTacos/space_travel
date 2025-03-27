@@ -12,7 +12,6 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        // File paths for input data - keep the original file names
         String planetsFile = "Gezegenler.txt";
         String shipsFile = "Araclar.txt";
         String peopleFile = "Kisiler.txt";
@@ -20,12 +19,10 @@ public class Main {
         System.out.println("Starting Space Travel Simulation...");
         System.out.println("Reading input files...");
         
-        // Read data from input files
         List<Planet> planets = FileReader.readPlanets(planetsFile);
         List<Spaceship> ships = FileReader.readSpaceships(shipsFile);
         List<Person> people = FileReader.readPeople(peopleFile);
         
-        // Place people on their starting planets or ships
         FileReader.placePeople(people, planets, ships);
         
         System.out.println("Initialization complete.");
@@ -33,7 +30,6 @@ public class Main {
                         ships.size() + " spaceships, and " + 
                         people.size() + " people.");
         
-        // Create and start simulation
         Simulation simulation = new Simulation(planets, ships);
         simulation.start();
     }

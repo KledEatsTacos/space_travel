@@ -17,13 +17,6 @@ public class Planet {
     private Time time;
     private List<Person> population;
     
-    /**
-     * Creates a new planet with the specified attributes
-     * 
-     * @param name The name of the planet
-     * @param dayLength The length of a day on the planet in hours
-     * @param date The current date on the planet
-     */
     public Planet(String name, int dayLength, String date) {
         this.name = name;
         this.dayLength = dayLength;
@@ -31,14 +24,9 @@ public class Planet {
         this.population = new ArrayList<>();
     }
     
-    /**
-     * Updates the planet for each hour that passes
-     * Advances time and updates the population
-     */
     public void passHour() {
         time.increaseHour();
         
-        // Update population and remove dead people
         List<Person> alive = new ArrayList<>();
         for (Person person : population) {
             person.passHour();
@@ -47,25 +35,13 @@ public class Planet {
             }
         }
         
-        // Remove dead people
         population = alive;
     }
     
-    /**
-     * Adds a person to the planet's population
-     * 
-     * @param person The person to add
-     */
     public void addPerson(Person person) {
         population.add(person);
     }
     
-    /**
-     * Removes people assigned to a specific spaceship from the planet
-     * 
-     * @param shipName The name of the spaceship
-     * @return A list of people who were removed
-     */
     public List<Person> removePeople(String shipName) {
         List<Person> passengersOnShip = new ArrayList<>();
         List<Person> remainingPopulation = new ArrayList<>();
@@ -82,38 +58,18 @@ public class Planet {
         return passengersOnShip;
     }
     
-    /**
-     * Gets the name of the planet
-     * 
-     * @return The planet name
-     */
     public String getName() {
         return name;
     }
     
-    /**
-     * Gets the length of a day on the planet in hours
-     * 
-     * @return The day length in hours
-     */
     public int getDayLength() {
         return dayLength;
     }
     
-    /**
-     * Gets the time system of the planet
-     * 
-     * @return The planet's time
-     */
     public Time getTime() {
         return time;
     }
     
-    /**
-     * Gets the population of the planet
-     * 
-     * @return A list of people on the planet
-     */
     public List<Person> getPopulation() {
         return population;
     }
