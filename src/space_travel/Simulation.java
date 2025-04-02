@@ -1,9 +1,3 @@
-package space_travel;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author Space Travel Simulation
  * @since March 26, 2025
@@ -12,6 +6,13 @@ import java.util.Map;
  * It manages the time progression, updates planets and spaceships, and displays the simulation status.
  * </p>
  */
+
+package space_travel;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Simulation {
     private List<Planet> planets;
     private List<Spaceship> ships;

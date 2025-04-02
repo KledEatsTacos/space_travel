@@ -1,3 +1,12 @@
+/**
+ * @author 
+ * @since March 26, 2025
+ * <p>
+ * This class handles file reading operations for the space travel simulation.
+ * It reads and parses data from input files for planets, spaceships, and people.
+ * </p>
+ */
+
 package space_travel;
 
 import java.io.BufferedReader;
@@ -7,14 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author 
- * @since March 26, 2025
- * <p>
- * This class handles file reading operations for the space travel simulation.
- * It reads and parses data from input files for planets, spaceships, and people.
- * </p>
- */
 public class FileReader {
     
     public static List<Planet> readPlanets(String filePath) {

@@ -1,5 +1,3 @@
-package space_travel;
-
 /**
  * @author Space Travel Simulation
  * @since March 26, 2025
@@ -8,6 +6,9 @@ package space_travel;
  * It handles different day lengths for different planets and advances time accordingly.
  * </p>
  */
+
+package space_travel;
+
 public class Time {
     private int day;
     private int month;

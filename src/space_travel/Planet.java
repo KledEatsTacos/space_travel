@@ -1,8 +1,3 @@
-package space_travel;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Space Travel Simulation
  * @since March 26, 2025
@@ -11,6 +6,12 @@ import java.util.List;
  * It manages the planet's time, population, and interactions with spaceships.
  * </p>
  */
+
+package space_travel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Planet {
     private String name;
     private int dayLength;

@@ -1,7 +1,3 @@
-package space_travel;
-
-import java.util.List;
-
 /**
  * @author Space Travel Simulation
  * @since March 26, 2025
@@ -10,6 +6,11 @@ import java.util.List;
  * It reads data from input files and initializes the simulation.
  * </p>
  */
+
+package space_travel;
+
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         String planetsFile = "Gezegenler.txt";

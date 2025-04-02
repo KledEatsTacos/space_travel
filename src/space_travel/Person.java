@@ -1,5 +1,3 @@
-package space_travel;
-
 /**
  * @author Space Travel Simulation
  * @since March 26, 2025
@@ -8,6 +6,9 @@ package space_travel;
  * It tracks the person's name, age, remaining life, and current location.
  * </p>
  */
+
+package space_travel;
+
 public class Person {
     private String name;
     private int age;
