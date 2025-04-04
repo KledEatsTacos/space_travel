@@ -111,16 +111,14 @@ public class Simulation {
     }
     
     private void checkSimulationComplete() {
-        boolean allShipsArrived = true;
-        
-        for (Spaceship ship : ships) {
-            if (ship.isInTransit() && !ship.isDestroyed()) {
-                allShipsArrived = false;
-                break;
+        simulationComplete = true;
+
+        for(Spaceship ship : ships) {
+            if (!ship.isDestroyed() && !ship.hasArrived()) {
+                simulationComplete = false;
+                return;
             }
         }
-        
-        simulationComplete = allShipsArrived;
     }
     
     private void printFinalReport() {
@@ -158,35 +156,94 @@ public class Simulation {
     private void displayState() {
         clearScreen();
 
+        // Display planets section in tabular format
         System.out.println("Planets:");
+        
+        // Print header row for planets - use fixed spacing between columns
+        System.out.printf("%-10s", "");
         for (Planet planet : planets) {
-            System.out.printf("--- %s ---%n", planet.getName());
-            System.out.printf("Date: %s%n", planet.getTime().getDate());
-            System.out.printf("Population: %d%n%n", planet.getPopulation().size());
+            System.out.printf(" %-17s ", "--- " + planet.getName() + " ---");
         }
-
+        System.out.println();
+        
+        // Print date row
+        System.out.printf("%-10s", "Date");
+        for (Planet planet : planets) {
+            System.out.printf(" %-17s ", planet.getTime().getDate());
+        }
+        System.out.println();
+        
+        // Print population row
+        System.out.printf("%-10s", "Population");
+        for (Planet planet : planets) {
+            System.out.printf(" %-17d ", planet.getPopulation().size());
+        }
+        System.out.println("\n");
+        
+        // Display spaceships section in tabular format
         System.out.println("Spaceships:");
-        System.out.printf("%-10s %-10s %-10s %-10s %-20s %-20s%n", 
+        System.out.printf("%-15s %-15s %-15s %-15s %-25s %-25s%n", 
                 "Ship Name", "Status", "Departure", "Destination", "Hours Remaining", "Arrival Date");
+        System.out.println();
+        
         for (Spaceship ship : ships) {
             String status;
             if (ship.isDestroyed()) {
                 status = "DESTROYED";
+            } else if (ship.hasArrived()) {
+                status = "Arrived";
             } else if (ship.isInTransit()) {
                 status = "In Transit";
-            } else if (ship.isTravelComplete()) {
-                status = "Arrived";
             } else {
                 status = "Waiting";
             }
 
-            String arrivalDate = ship.isInTransit() ? ship.getDestinationPlanet() : "--";
-            if (ship.isTravelComplete()) {
-                arrivalDate = ship.getDestinationPlanet();
+            // Calculate arrival date
+            String arrivalDate;
+            
+            // Always calculate the expected arrival date regardless of ship status
+            Planet departurePlanet = null;
+            for (Planet planet : planets) {
+                if (planet.getName().equals(ship.getDeparturePlanet())) {
+                    departurePlanet = planet;
+                    break;
+                }
+            }
+            
+            if (departurePlanet != null) {
+                // Create a temporary Time object based on the departure date
+                Time arrivalTime = new Time(ship.getDepartureDate(), departurePlanet.getDayLength());
+                
+                // Calculate how many hours to add for the journey
+                int hoursToAdd = ship.getTravelDuration();
+                
+                // Add hours to reach arrival date
+                for (int i = 0; i < hoursToAdd; i++) {
+                    arrivalTime.increaseHour();
+                }
+                
+                arrivalDate = arrivalTime.getDate();
+            } else {
+                arrivalDate = "--";
+            }
+            
+            // If the ship has already arrived, use the current date of the destination planet
+            if (ship.hasArrived()) {
+                Planet destinationPlanet = null;
+                for (Planet planet : planets) {
+                    if (planet.getName().equals(ship.getDestinationPlanet())) {
+                        destinationPlanet = planet;
+                        break;
+                    }
+                }
+                
+                if (destinationPlanet != null) {
+                    arrivalDate = destinationPlanet.getTime().getDate();
+                }
             }
 
             System.out.printf(
-                "%-10s %-10s %-10s %-10s %-20d %-20s%n",
+                "%-15s %-15s %-15s %-15s %-25d %-25s%n",
                 ship.getName(),
                 status,
                 ship.getDeparturePlanet(),

@@ -22,6 +22,9 @@ public class Spaceship {
     private List<Person> passengers;
     private boolean inTransit;
     private boolean destroyed;
+    private boolean arrived;
+
+
     
     public Spaceship(String name, String departurePlanet, String destinationPlanet, String departureDate, int travelDuration) {
         this.name = name;
@@ -72,9 +75,10 @@ public class Spaceship {
                          travelDuration + " hours.");
     }
     
-    public void endJourney() {
+    public void endJourney() { 
         inTransit = false;
-        System.out.println(name + " has arrived at " + destinationPlanet + "!");
+        arrived = true;
+        System.out.println(name + " has arrived at " + destinationPlanet + ".");
     }
     
     public String getName() {
@@ -104,9 +108,17 @@ public class Spaceship {
     public boolean isDestroyed() {
         return destroyed;
     }
+
+    public boolean hasArrived() {
+        return arrived;
+    }
     
     public int getRemainingTravelTime() {
         return remainingTravelTime;
+    }
+    
+    public int getTravelDuration() {
+        return travelDuration;
     }
     
     @Override
@@ -116,6 +128,9 @@ public class Spaceship {
         } else if (inTransit) {
             return String.format("%s (%s -> %s, Time remaining: %d hours, Passengers: %d)",
                     name, departurePlanet, destinationPlanet, remainingTravelTime, passengers.size());
+        } else if (arrived) {
+            return String.format("%s (Arrived at %s, Passengers: %d)",
+                    name, destinationPlanet, passengers.size());
         } else {
             return String.format("%s (On planet %s, Passengers: %d)",
                     name, departurePlanet, passengers.size());
