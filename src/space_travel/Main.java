@@ -1,5 +1,5 @@
 /**
- * @author Space Travel Simulation
+ * @author Mustafa Masri
  * @since March 26, 2025
  * <p>
  * This is the main class that starts the space travel simulation.
@@ -9,29 +9,20 @@
 
 package space_travel;
 
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
-        String planetsFile = "Gezegenler.txt";
-        String shipsFile = "Araclar.txt";
-        String peopleFile = "Kisiler.txt";
+
+        final String PLANETS_FILE = "Gezegenler.txt";
+        final String SHIPS_FILE = "Araclar.txt";
+        final String PEOPLE_FILE = "Kisiler.txt";
         
-        System.out.println("Starting Space Travel Simulation...");
-        System.out.println("Reading input files...");
+
+        var planets = FileReader.readPlanets(PLANETS_FILE);
+        var ships = FileReader.readSpaceships(SHIPS_FILE);
+        var people = FileReader.readPeople(PEOPLE_FILE);
         
-        List<Planet> planets = FileReader.readPlanets(planetsFile);
-        List<Spaceship> ships = FileReader.readSpaceships(shipsFile);
-        List<Person> people = FileReader.readPeople(peopleFile);
-        
+
         FileReader.placePeople(people, planets, ships);
-        
-        System.out.println("Initialization complete.");
-        System.out.println("Loaded " + planets.size() + " planets, " + 
-                        ships.size() + " spaceships, and " + 
-                        people.size() + " people.");
-        
-        Simulation simulation = new Simulation(planets, ships);
-        simulation.start();
+        new Simulation(planets, ships).start();
     }
 }

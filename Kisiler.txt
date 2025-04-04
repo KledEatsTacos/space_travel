@@ -2,9 +2,15 @@ Alex#25#500#Apollo
 Maria#35#650#Explorer
 John#40#480#Earth
 Carlos#28#520#Mars
-Emily#31#600#Voyager
+Emily#31#20#Voyager
 Dave#45#430#Jupiter
 Sophia#29#550#Venus
 Michael#38#490#Pioneer
 Olivia#26#580#StarDust
 James#33#510#Mercury
+Sarah#22#18#Apollo
+Tom#41#15#Explorer
+Lisa#36#10#StarDust
+Jack#29#30#Doomed
+Robert#33#25#Doomed
+Linda#27#22#Doomed

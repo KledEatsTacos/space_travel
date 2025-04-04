@@ -23,8 +23,6 @@ public class Spaceship {
     private boolean inTransit;
     private boolean destroyed;
     private boolean arrived;
-
-
     
     public Spaceship(String name, String departurePlanet, String destinationPlanet, String departureDate, int travelDuration) {
         this.name = name;
@@ -36,6 +34,7 @@ public class Spaceship {
         this.passengers = new ArrayList<>();
         this.inTransit = false;
         this.destroyed = false;
+        this.arrived = false;
     }
     
     public void addPassenger(Person person) {
@@ -59,7 +58,6 @@ public class Spaceship {
             
             if (passengers.isEmpty() && hadPassengers) {
                 destroyed = true;
-                System.out.println("All passengers on " + name + " have died. The ship has been DESTROYED!");
             }
         }
     }
@@ -70,15 +68,11 @@ public class Spaceship {
     
     public void startJourney() {
         inTransit = true;
-        System.out.println(name + " has departed from " + departurePlanet + " to " + 
-                         destinationPlanet + ". Estimated arrival time: " + 
-                         travelDuration + " hours.");
     }
     
     public void endJourney() { 
         inTransit = false;
         arrived = true;
-        System.out.println(name + " has arrived at " + destinationPlanet + ".");
     }
     
     public String getName() {
