@@ -1,5 +1,5 @@
 /**
- * @author 
+ * @author Mustafa Masri
  * @since March 26, 2025
  * <p>
  * This class handles file reading operations for the space travel simulation.

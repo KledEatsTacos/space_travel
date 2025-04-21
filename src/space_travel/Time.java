@@ -1,5 +1,5 @@
 /**
- * @author Space Travel Simulation
+ * @author Mustafa Masri
  * @since March 26, 2025
  * <p>
  * This class manages time and date progression based on a planet's day length.

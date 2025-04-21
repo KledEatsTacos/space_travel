@@ -1,5 +1,5 @@
 /**
- * @author Space Travel Simulation
+ * @author Mustafa Masri
  * @since March 26, 2025
  * <p>
  * This class represents a person in the space travel simulation.

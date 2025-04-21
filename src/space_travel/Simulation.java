@@ -1,5 +1,5 @@
 /**
- * @author Space Travel Simulation
+ * @author Mustafa Masri
  * @since March 26, 2025
  * <p>
  * This class controls the main simulation loop and updates for the space travel simulation.
