@@ -64,12 +64,6 @@ public class FileReader {
         });
     }
     
-    /**
-     * Generic file reading method that handles file operations and error handling
-     * @param filePath Path to the file to read
-     * @param lineParser Function that parses a line into an object of type T
-     * @return List of parsed objects
-     */
     private static <T> List<T> readFile(String filePath, Function<String, T> lineParser) {
         List<T> results = new ArrayList<>();
         
