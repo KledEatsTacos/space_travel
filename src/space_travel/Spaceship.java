@@ -23,6 +23,8 @@ public class Spaceship {
     private boolean inTransit;
     private boolean destroyed;
     private boolean arrived;
+    private List<Person> originalPassengers = null;
+    private String actualArrivalDate = null;
     
     public Spaceship(String name, String departurePlanet, String destinationPlanet, String departureDate, int travelDuration) {
         this.name = name;
@@ -114,9 +116,24 @@ public class Spaceship {
         return travelDuration;
     }
     
-    // New method to explicitly mark the ship as destroyed
+    public void setOriginalPassengers(List<Person> passengers) {
+        this.originalPassengers = new ArrayList<>(passengers);
+    }
+
+    public List<Person> getOriginalPassengers() {
+        return originalPassengers;
+    }
+    
     public void markAsDestroyed() {
         this.destroyed = true;
+    }
+    
+    public String getActualArrivalDate() {
+        return actualArrivalDate;
+    }
+
+    public void setActualArrivalDate(String actualArrivalDate) {
+        this.actualArrivalDate = actualArrivalDate;
     }
     
     @Override

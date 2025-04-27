@@ -51,19 +51,14 @@ public class Time {
      * @param hours The number of hours to add
      */
     public void addHours(int hours) {
-        // Calculate total hours
         int totalHours = hour + hours;
         
-        // Calculate days to add based on day length
         int daysToAdd = totalHours / dayLength;
         
-        // Set the new hour
         hour = totalHours % dayLength;
         
-        // Add the days
         day += daysToAdd;
         
-        // Handle month and year rollover
         while (day > DAYS_PER_MONTH) {
             day -= DAYS_PER_MONTH;
             month++;
@@ -76,7 +71,7 @@ public class Time {
     }
     
     public String getDate() {
-        return String.format("%d.%d.%d", day, month, year);
+        return String.format("%02d.%02d.%d", day, month, year);
     }
     
     public String getHour() {
