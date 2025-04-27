@@ -30,7 +30,6 @@ public class Planet {
         
         List<Person> alive = new ArrayList<>();
         for (Person person : population) {
-            person.passHour();
             if (person.isAlive()) {
                 alive.add(person);
             }

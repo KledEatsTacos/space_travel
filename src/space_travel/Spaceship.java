@@ -47,7 +47,6 @@ public class Spaceship {
             
             List<Person> alive = new ArrayList<>();
             for (Person person : passengers) {
-                person.passHour();
                 if (person.isAlive()) {
                     alive.add(person);
                 }
@@ -113,6 +112,11 @@ public class Spaceship {
     
     public int getTravelDuration() {
         return travelDuration;
+    }
+    
+    // New method to explicitly mark the ship as destroyed
+    public void markAsDestroyed() {
+        this.destroyed = true;
     }
     
     @Override

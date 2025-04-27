@@ -44,6 +44,37 @@ public class Time {
         }
     }
     
+    /**
+     * Adds a specified number of hours to the current time at once.
+     * This is more efficient than calling increaseHour repeatedly.
+     * 
+     * @param hours The number of hours to add
+     */
+    public void addHours(int hours) {
+        // Calculate total hours
+        int totalHours = hour + hours;
+        
+        // Calculate days to add based on day length
+        int daysToAdd = totalHours / dayLength;
+        
+        // Set the new hour
+        hour = totalHours % dayLength;
+        
+        // Add the days
+        day += daysToAdd;
+        
+        // Handle month and year rollover
+        while (day > DAYS_PER_MONTH) {
+            day -= DAYS_PER_MONTH;
+            month++;
+            
+            if (month > 12) {
+                month = 1;
+                year++;
+            }
+        }
+    }
+    
     public String getDate() {
         return String.format("%d.%d.%d", day, month, year);
     }

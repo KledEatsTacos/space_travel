@@ -23,6 +23,6 @@ public class Main {
         
 
         FileReader.placePeople(people, planets, ships);
-        new Simulation(planets, ships).start();
+        new Simulation(planets, ships, people).start();
     }
 }

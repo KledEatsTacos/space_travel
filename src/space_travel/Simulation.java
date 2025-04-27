@@ -1,5 +1,5 @@
 /**
- * @author Mustafa Masri
+ * @author Space Travel Simulation
  * @since March 26, 2025
  * <p>
  * This class controls the main simulation loop and updates for the space travel simulation.
@@ -9,21 +9,24 @@
 
 package space_travel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.Map; // Import ArrayList
 
 public class Simulation {
-    private List<Planet> planets;
-    private List<Spaceship> ships;
+    private final List<Planet> planets;
+    private final List<Spaceship> ships;
+    private final List<Person> allPeople; // Added master list of all people
     private int hourCounter;
     private boolean simulationComplete;
     private Map<String, Planet> planetMap;
     
-    public Simulation(List<Planet> planets, List<Spaceship> ships) {
+    // Updated constructor to accept allPeople list
+    public Simulation(List<Planet> planets, List<Spaceship> ships, List<Person> allPeople) {
         this.planets = planets;
         this.ships = ships;
+        this.allPeople = new ArrayList<>(allPeople); // Store a copy of the list
         this.hourCounter = 0;
         this.simulationComplete = false;
         initPlanetMap();
@@ -37,60 +40,67 @@ public class Simulation {
     }
     
     public void start() {
-        Scanner scanner = new Scanner(System.in);
-        
         while (!simulationComplete) {
+            // Decrease life for ALL people globally first
+            updateAllPeopleLife();
+            
+            // advance simulation logic for planets and active ships
+            updatePlanetStatus(); // Planet.passHour now only advances time and removes dead
+            updateShipStatus();   // Spaceship.passHour now only advances time and removes dead during transit
+            checkSimulationComplete();
+            
+            // render updated state
+            clearScreen();
             displayState();
             
-            String input = scanner.nextLine().trim();
-            int hoursToAdvance = parseInput(input);
-            
-            if (hoursToAdvance == -1) break;  // Exit command
-            if (hoursToAdvance == 0) continue; // Invalid input
-            
-            advanceTime(hoursToAdvance);
-        }
-        
-        scanner.close();
-        printFinalReport();
-    }
-    
-    private int parseInput(String input) {
-        if (input.equals("0")) return -1;  // Exit code
-        if (input.equals("1")) return 1;
-        if (input.equals("2")) return 10;
-        if (input.equals("3")) return 50;
-        
-        System.out.println("Invalid input. Please enter 0, 1, 2, or 3.");
-        return 0; // Invalid input code
-    }
-    
-    private void advanceTime(int hours) {
-        for (int i = 0; i < hours; i++) {
+            // increment simulation time without delay
             hourCounter++;
-            updatePlanetStatus();
-            updateShipStatus();
-            
-            if (checkSimulationComplete()) break;
         }
+        
+        // final update and completion message
+        clearScreen();
+        displayState();
+        System.out.println("\nSimulation complete after " + hourCounter + " hours.");
     }
     
     private void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("windows")) {
+            try {
+                // Use cls command for Windows cmd
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } catch (Exception e) {
+                // Fallback if cls fails (e.g., permissions issue)
+                for (int i = 0; i < 50; i++) System.out.println();
+            }
+        } else {
+            // Use ANSI escape codes on supported terminals (Linux, macOS, VSCode integrated)
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+        }
+    }
+    
+    // New method to decrease life for everyone
+    private void updateAllPeopleLife() {
+        for (Person person : allPeople) {
+            person.passHour();
+        }
     }
     
     private void updatePlanetStatus() {
         for (Planet planet : planets) {
-            planet.passHour();
+            planet.passHour(); // Planet.passHour no longer calls person.passHour()
         }
     }
     
     private void updateShipStatus() {
         for (Spaceship ship : ships) {
-            processShipDeparture(ship);
-            ship.passHour();
-            processShipArrival(ship);
+            // Only process departure/arrival/transit for non-destroyed ships
+            if (!ship.isDestroyed()) { 
+                processShipDeparture(ship);
+                ship.passHour(); // Spaceship.passHour no longer calls person.passHour()
+                processShipArrival(ship);
+            }
         }
     }
     
@@ -110,165 +120,131 @@ public class Simulation {
     }
     
     private void processShipArrival(Spaceship ship) {
-        if (!ship.isTravelComplete()) return;
-        
-        Planet destinationPlanet = planetMap.get(ship.getDestinationPlanet());
-        if (destinationPlanet == null) return;
-        
-        for (Person person : ship.getPassengers()) {
-            person.setCurrentVehicle(destinationPlanet.getName());
-            destinationPlanet.addPerson(person);
-        }
-        ship.endJourney();
-    }
-    
-    private boolean checkSimulationComplete() {
-        for (Spaceship ship : ships) {
-            if (!ship.isDestroyed() && !ship.hasArrived()) {
-                return false;
+        if (ship.isTravelComplete()) {
+            Planet destinationPlanet = planetMap.get(ship.getDestinationPlanet());
+            
+            if (destinationPlanet != null) {
+                for (Person person : ship.getPassengers()) {
+                    person.setCurrentVehicle(destinationPlanet.getName());
+                    destinationPlanet.addPerson(person);
+                }
+                
+                ship.endJourney();
             }
         }
+    }
+    
+    private void checkSimulationComplete() {
         simulationComplete = true;
-        return true;
+
+        for(Spaceship ship : ships) {
+            if (!ship.isDestroyed() && !ship.hasArrived()) {
+                simulationComplete = false;
+                return;
+            }
+        }
     }
     
-    private void printFinalReport() {
-        clearScreen();
-        System.out.println("=== SIMULATION FINAL REPORT ===");
-        System.out.println("Total Hours Elapsed: " + hourCounter + "\n");
-        
-        int totalPopulation = 0;
-        System.out.println("PLANET STATUS:");
-        for (Planet planet : planets) {
-            System.out.println(planet);
-            System.out.println("  Population: " + planet.getPopulation().size() + " people");
-            for (Person person : planet.getPopulation()) {
-                System.out.println("    - " + person);
-            }
-            totalPopulation += planet.getPopulation().size();
-        }
-        
-        System.out.println("\nSPACESHIP STATUS:");
-        int destroyedShips = 0;
-        for (Spaceship ship : ships) {
-            System.out.println(ship);
-            if (ship.isDestroyed()) destroyedShips++;
-        }
-        
-        System.out.println("\nSUMMARY:");
-        System.out.println("Total Population: " + totalPopulation + " people");
-        System.out.println("Destroyed Ships: " + destroyedShips);
-    }
-
     private void displayState() {
-        clearScreen();
-        
-        // Display planet info
+        System.out.println("Simulation Hour: " + hourCounter);
         System.out.println("Planets:");
         
-        // Header row
+        // Print header row for planets
         System.out.printf("%-10s", "");
         for (Planet planet : planets) {
-            System.out.printf(" %-17s ", "--- " + planet.getName() + " ---");
+            System.out.printf(" %s %s %s ", "---", planet.getName(), "---");
         }
         System.out.println();
         
-        // Date row
+        // Print date row
         System.out.printf("%-10s", "Date");
         for (Planet planet : planets) {
             System.out.printf(" %-17s ", planet.getTime().getDate());
         }
         System.out.println();
         
-        // Population row
+        // Print population row
         System.out.printf("%-10s", "Population");
         for (Planet planet : planets) {
             System.out.printf(" %-17d ", planet.getPopulation().size());
         }
         System.out.println("\n");
         
-        // Display spaceship info
-        System.out.println("Spaceships:");
-        System.out.printf("%-15s %-15s %-15s %-15s %-25s %-25s%n", 
+        // Display spaceships section
+        System.out.printf("%-12s %-12s %-12s %-12s %-20s %-20s%n", 
                 "Ship Name", "Status", "Departure", "Destination", "Hours Remaining", "Arrival Date");
-        System.out.println();
         
         for (Spaceship ship : ships) {
-            String status = getShipStatus(ship);
+            String status;
+            if (ship.isDestroyed()) {
+                status = "Destroyed"; // Ensure English
+            } else if (ship.hasArrived()) {
+                status = "Arrived";   // Ensure English
+            } else if (ship.isInTransit()) {
+                status = "In Transit"; // Ensure English
+            } else {
+                status = "Waiting";    // Ensure English
+            }
+
+            // Calculate arrival date
             String arrivalDate = calculateArrivalDate(ship);
 
-            System.out.printf("%-15s %-15s %-15s %-15s %-25d %-25s%n",
-                    ship.getName(), status, ship.getDeparturePlanet(),
-                    ship.getDestinationPlanet(), ship.getRemainingTravelTime(), arrivalDate);
+            // Ensure remaining time is 0 for Arrived/Destroyed ships in display
+            int displayRemainingTime = (status.equals("Arrived") || status.equals("Destroyed")) ? 0 : ship.getRemainingTravelTime();
+
+            System.out.printf(
+                "%-12s %-12s %-12s %-12s %-20d %-20s%n",
+                ship.getName(),
+                status,
+                ship.getDeparturePlanet(),
+                ship.getDestinationPlanet(),
+                displayRemainingTime, // Use adjusted remaining time
+                arrivalDate
+            );
+        }
+    }
+
+    // Helper method to calculate arrival date - Optimize by caching calculations
+    private final Map<Spaceship, String> arrivalDateCache = new HashMap<>();
+    
+    private String calculateArrivalDate(Spaceship ship) {
+        // Check if we have a cached result for unchanged ships
+        if (arrivalDateCache.containsKey(ship) && !ship.isInTransit()) {
+            return arrivalDateCache.get(ship);
         }
         
-        displayControls();
-    }
-    
-    private void displayControls() {
-        System.out.println("\n-------------------------------------------------\n");
-        System.out.println("Current Hour: " + hourCounter);
-        System.out.println("\nControls:");
-        System.out.println("1 - Advance 1 hour");
-        System.out.println("2 - Advance 10 hours");
-        System.out.println("3 - Advance 50 hours");
-        System.out.println("0 - Exit simulation");
-        System.out.print("\nEnter your choice: ");
-    }
-    
-    // Helper method to determine ship status
-    private String getShipStatus(Spaceship ship) {
-        if (ship.isDestroyed()) {
-            return "DESTROYED";
-        } else if (ship.isInTransit()) {
-            return "In Transit";
-        } else if (ship.isTravelComplete()) {
-            return "Arrived";
-        } else {
-            return "Waiting";
-        }
-    }
-    
-    // Helper method to calculate arrival date
-    private String calculateArrivalDate(Spaceship ship) {
         String arrivalDate = "--";
-        if (ship.isInTransit()) {
+        
+        // For ships that are destroyed
+        if (ship.isDestroyed()) {
+            arrivalDate = "--"; // Show -- for destroyed ships
+        } 
+        // For ships that are waiting to depart or in transit - calculate expected arrival
+        else if (!ship.isTravelComplete()) {
             // Get departure planet to use its day length for calculations
-            Planet departurePlanet = null;
-            for (Planet planet : planets) {
-                if (planet.getName().equals(ship.getDeparturePlanet())) {
-                    departurePlanet = planet;
-                    break;
-                }
-            }
+            Planet departurePlanet = planetMap.get(ship.getDeparturePlanet());
             
             if (departurePlanet != null) {
                 // Create a temporary Time object based on the departure date
                 Time arrivalTime = new Time(ship.getDepartureDate(), departurePlanet.getDayLength());
                 
-                // Calculate how many hours to add for the journey
-                int hoursToAdd = ship.getTravelDuration();
-                
-                // Add hours to reach arrival date
-                for (int i = 0; i < hoursToAdd; i++) {
-                    arrivalTime.increaseHour();
-                }
+                // Use the addHours method to efficiently calculate arrival date
+                arrivalTime.addHours(ship.getTravelDuration());
                 
                 arrivalDate = arrivalTime.getDate();
             }
-        } else if (ship.isTravelComplete()) {
-            Planet destinationPlanet = null;
-            for (Planet planet : planets) {
-                if (planet.getName().equals(ship.getDestinationPlanet())) {
-                    destinationPlanet = planet;
-                    break;
-                }
-            }
+        } 
+        // For ships that have already arrived
+        else if (ship.isTravelComplete()) {
+            Planet destinationPlanet = planetMap.get(ship.getDestinationPlanet());
             
             if (destinationPlanet != null) {
                 arrivalDate = destinationPlanet.getTime().getDate();
             }
         }
+        
+        // Update cache
+        arrivalDateCache.put(ship, arrivalDate);
         
         return arrivalDate;
     }
